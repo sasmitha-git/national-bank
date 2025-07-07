@@ -7,9 +7,9 @@ import lk.jiat.bank.core.model.Account;
 public interface AccountService {
 
     Account getAccountById(Long id);
-    Account getAccountByAN(String accountNumber);
+    Account getAccountByAccountNumber(String accountNumber);
     void createAccount(Account account);
     void updateAccount(Account account);
-    void deleteAccount(Account account);
+
 
 }

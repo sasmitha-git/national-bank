@@ -50,7 +50,7 @@ public class UserSessionBean implements UserService {
     }
 
 
-    @RolesAllowed({"ADMIN","CUSTOMER"})
+    @PermitAll
     @Override
     public boolean isActiveUser(String email) {
         try {
