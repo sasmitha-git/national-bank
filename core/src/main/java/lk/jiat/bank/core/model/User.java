@@ -24,7 +24,7 @@ public class User implements Serializable  {
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole userRole = UserRole.CUSTOMER;
-    private boolean active;
+    private boolean active = true;
 
 
     public User() {

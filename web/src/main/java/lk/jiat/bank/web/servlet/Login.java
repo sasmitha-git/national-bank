@@ -1,5 +1,6 @@
 package lk.jiat.bank.web.servlet;
 
+import jakarta.ejb.EJB;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.AuthenticationStatus;
 import jakarta.security.enterprise.SecurityContext;
@@ -10,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.jiat.bank.core.service.UserService;
 
 import java.io.IOException;
 
@@ -19,12 +21,20 @@ public class Login extends HttpServlet {
     @Inject
     private SecurityContext securityContext;
 
+    @EJB
+    private UserService userService;
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+
+        if(!userService.isActiveUser(email)){
+            response.sendRedirect(request.getContextPath() + "/index.jsp?error=inactive");
+            return;
+        }
 
         AuthenticationParameters parameters = AuthenticationParameters.withParams()
                 .credential(new UsernamePasswordCredential(email, password))

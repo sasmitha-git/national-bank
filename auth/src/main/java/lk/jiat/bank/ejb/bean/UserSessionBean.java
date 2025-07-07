@@ -1,8 +1,10 @@
 package lk.jiat.bank.ejb.bean;
 
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import lk.jiat.bank.core.model.User;
 import lk.jiat.bank.core.service.UserService;
@@ -39,9 +41,28 @@ public class UserSessionBean implements UserService {
 
     @RolesAllowed("ADMIN")
     @Override
-    public void deleteUser(User user) {
-        em.remove(user);
+    public void deactivateUser(Long id) {
+        User user = em.find(User.class, id);
+        if(user != null) {
+            user.setActive(false);
+            em.merge(user);
+        }
     }
+
+
+    @RolesAllowed({"ADMIN","CUSTOMER"})
+    @Override
+    public boolean isActiveUser(String email) {
+        try {
+            User user = em.createNamedQuery("User.findByEmail",User.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+            return user.isActive();
+        }catch (NoResultException e){
+            return false;
+        }
+    }
+
 
     @Override
     public boolean validate(String email, String password) {

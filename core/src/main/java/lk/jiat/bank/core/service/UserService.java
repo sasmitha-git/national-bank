@@ -11,7 +11,6 @@ public interface UserService {
     void addUser(User user);
     void updateUser(User user);
     void deactivateUser(Long id);
-    void activateUser(Long id);
     boolean isActiveUser(String email);
 
     boolean validate(String email, String password);
