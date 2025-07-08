@@ -3,13 +3,18 @@ package lk.jiat.bank.core.model;
 import jakarta.persistence.*;
 
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "accounts")
-public class Account {
+@NamedQueries({
+        @NamedQuery(name = "Account.findByAccountNumber" ,query = "select  a from Account a where a.accountNumber=:accNo"),
+        @NamedQuery(name = "Account.findAccountByUserId",query = "select  a from Account a where  a.user.id =:userId"),
+})
+public class Account implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, unique = true)
     private String accountNumber;

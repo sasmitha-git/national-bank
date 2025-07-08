@@ -3,6 +3,8 @@
     <persistence-unit name="BankPU" transaction-type="JTA">
         <jta-data-source>jdbc_national_bank</jta-data-source>
         <class>lk.jiat.bank.core.model.User</class>
+        <class>lk.jiat.bank.core.model.Account</class>
+
 
         <properties>
             <property name="jakarta.persistence.schema-generation.database.action" value="create"/>

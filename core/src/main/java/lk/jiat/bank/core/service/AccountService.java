@@ -3,6 +3,8 @@ package lk.jiat.bank.core.service;
 import jakarta.ejb.Remote;
 import lk.jiat.bank.core.model.Account;
 
+import java.util.List;
+
 @Remote
 public interface AccountService {
 
@@ -11,5 +13,9 @@ public interface AccountService {
     void createAccount(Account account);
     void updateAccount(Account account);
 
+    List<Account> getAccountsByUserId(Long id);
+
+    void debitFromAccount(String accountNo, Double amount);
+    void creditToAccount(String accountNo, Double amount);
 
 }

@@ -2,15 +2,18 @@ package lk.jiat.bank.core.model;
 
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transactions")
+@NamedQueries({
+        @NamedQuery(name = "Transaction.findTransactionByUserId", query = "select t from Transaction t " +
+                "where t.fromAccount.user.id =:userId or t.toAccount.user.id=:userId order by t.timestamp desc"),
+})
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "from_account_id")
@@ -18,28 +21,27 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "to_account_id")
     private Account toAccount;
-    private BigDecimal amount;
+    private double amount;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionType transactionType = TransactionType.DEBIT;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionStatus status;
-    private LocalDateTime timestamp;
+    private LocalDateTime timestamp = LocalDateTime.now();
 
     public Transaction() {
-        this.timestamp = LocalDateTime.now();
+
     }
 
     public Transaction(Account fromAccount, Account toAccount,
-                       BigDecimal amount, TransactionType transactionType,
-                       TransactionStatus status, LocalDateTime timestamp) {
+                       double amount, TransactionType transactionType,
+                       TransactionStatus status) {
         this.fromAccount = fromAccount;
         this.toAccount = toAccount;
         this.amount = amount;
         this.transactionType = transactionType;
         this.status = status;
-        this.timestamp = timestamp;
     }
 
     public Long getId() {
@@ -66,11 +68,11 @@ public class Transaction {
         this.toAccount = toAccount;
     }
 
-    public BigDecimal getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 

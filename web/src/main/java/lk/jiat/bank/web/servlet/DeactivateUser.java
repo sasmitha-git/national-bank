@@ -19,7 +19,7 @@ public class DeactivateUser extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Long userId = Long.parseLong(request.getParameter("userId"));
+        Long userId = Long.parseLong(request.getParameter("id"));
         userService.deactivateUser(userId);
         response.sendRedirect(request.getContextPath() + "/admin/users.jsp?success=deactivated");
 

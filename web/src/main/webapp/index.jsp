@@ -9,6 +9,7 @@
 <html>
 <head>
     <title>National Bank | Login</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/resources/images/logo.png">
 </head>
 <body>
 

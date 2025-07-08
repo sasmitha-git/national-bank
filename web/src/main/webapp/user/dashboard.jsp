@@ -7,23 +7,31 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <html>
 <head>
-    <title>Customer Dashboard</title>
+
+    <title>National Bank</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/resources/images/logo.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/customer_dashboard.css">
 </head>
 <body>
+
 <div class="dashboard-container">
     <div class="header">
-        <h1>Welcome, ${user.fullName}</h1>
-        <a href="${pageContext.request.contextPath}/logout" class="logout-link">Logout</a>
+       <div class="logo-section">
+           <img src="${pageContext.request.contextPath}/resources/images/logo.png" alt="National Bank" class="logo-icon">
+           <h2>National Bank </h2>
+       </div>
+           <a href="${pageContext.request.contextPath}/logout" class="logout-link">Logout</a>
     </div>
 
 
     <div class="account-summary">
+        <h1>Welcome, ${pageContext.request.userPrincipal.name}</h1>
         <h2>Your Accounts</h2>
-        <div class="account-grid">
-            <c:forEach items="${accounts}" var="account">
+        <div class="account-grid" id="accountGrid">
+            <c:forEach items="${sessionScope.accounts}" var="account">
                 <div class="account-card">
                     <h3>${account.accountType} Account</h3>
                     <p>Account Number: ${account.accountNumber}</p>
@@ -40,7 +48,7 @@
             <div class="form-group">
                 <label>From Account:</label>
                 <select name="fromAccount" class="form-control">
-                    <c:forEach items="${accounts}" var="account">
+                    <c:forEach items="${sessionScope.accounts}" var="account">
                         <option value="${account.accountNumber}">${account.accountNumber}</option>
                     </c:forEach>
                 </select>
@@ -69,7 +77,7 @@
                 <th>Status</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="transactionTableBody">
             <c:forEach items="${transactions}" var="transaction">
                 <tr>
                     <td>${transaction.timestamp}</td>
@@ -82,5 +90,6 @@
         </table>
     </div>
 </div>
+
 </body>
 </html>

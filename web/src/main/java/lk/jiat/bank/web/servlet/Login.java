@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.jiat.bank.core.model.User;
 import lk.jiat.bank.core.service.UserService;
 
 import java.io.IOException;
@@ -31,6 +32,8 @@ public class Login extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
+
+
         if(!userService.isActiveUser(email)){
             response.sendRedirect(request.getContextPath() + "/index.jsp?error=inactive");
             return;
@@ -45,6 +48,10 @@ public class Login extends HttpServlet {
         System.out.println("Authentication status: " + status);
 
         if(status == AuthenticationStatus.SUCCESS) {
+            //new
+            User user = userService.getUserByEmail(email);
+            request.getSession().setAttribute("user", user.getId());
+
             response.sendRedirect(request.getContextPath()+"/check-role");
 
         }else{
