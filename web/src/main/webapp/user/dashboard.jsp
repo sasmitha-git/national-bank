@@ -26,7 +26,6 @@
            <a href="${pageContext.request.contextPath}/logout" class="logout-link">Logout</a>
     </div>
 
-
     <div class="account-summary">
         <h1>Welcome, ${pageContext.request.userPrincipal.name}</h1>
         <h2>Your Accounts</h2>
@@ -44,7 +43,7 @@
 
     <div class="transfer-form">
         <h2>Transfer Funds</h2>
-        <form action="${pageContext.request.contextPath}/transfer" method="post">
+        <form method="POST"  action="${pageContext.request.contextPath}/transfer" >
             <div class="form-group">
                 <label>From Account:</label>
                 <select name="fromAccount" class="form-control">
