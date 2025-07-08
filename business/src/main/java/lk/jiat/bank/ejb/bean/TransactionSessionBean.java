@@ -6,6 +6,7 @@ import jakarta.ejb.TransactionAttribute;
 import jakarta.ejb.TransactionAttributeType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lk.jiat.bank.core.dto.TransactionDTO;
 import lk.jiat.bank.core.model.Account;
 import lk.jiat.bank.core.model.Transaction;
 import lk.jiat.bank.core.model.TransactionStatus;
@@ -13,6 +14,8 @@ import lk.jiat.bank.core.model.TransactionType;
 import lk.jiat.bank.core.service.AccountService;
 import lk.jiat.bank.core.service.TransactionService;
 
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -55,10 +58,37 @@ public class TransactionSessionBean implements TransactionService {
         em.persist(transaction);
     }
 
-    @Override
-    public List<Transaction> getTransactionsByUserId(Long userId) {
-        return em.createNamedQuery("Transaction.findTransactionByUserId", Transaction.class)
+
+
+    public List<TransactionDTO> getTransactionsDTOByUserId(Long userId) {
+        List<Transaction> transactions = em.createNamedQuery("Transaction.findTransactionByUserId", Transaction.class)
                 .setParameter("userId", userId).getResultList();
+
+        List<TransactionDTO> dtoList = new ArrayList<>();
+
+
+
+
+        for (Transaction transaction : transactions) {
+            String fromAccountNumber = transaction.getFromAccount().getAccountNumber();
+            String toAccountNumber = transaction.getToAccount().getAccountNumber();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            String formattedDate = transaction.getTimestamp().format(formatter);
+
+            TransactionDTO dto = new TransactionDTO(
+                    fromAccountNumber,
+                    toAccountNumber,
+                    transaction.getAmount(),
+                    transaction.getTransactionType().toString(),
+                    transaction.getStatus().toString(),
+                    formattedDate
+            );
+
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
 
 

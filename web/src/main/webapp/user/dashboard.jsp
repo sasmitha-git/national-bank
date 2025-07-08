@@ -77,18 +77,12 @@
             </tr>
             </thead>
             <tbody id="transactionTableBody">
-            <c:forEach items="${transactions}" var="transaction">
-                <tr>
-                    <td>${transaction.timestamp}</td>
-                    <td>${transaction.transactionType}</td>
-                    <td>${transaction.amount}</td>
-                    <td>${transaction.status}</td>
-                </tr>
-            </c:forEach>
+
             </tbody>
         </table>
     </div>
 </div>
 
+<script src="${pageContext.request.contextPath}/resources/js/transactionHistory.js"></script>
 </body>
 </html>

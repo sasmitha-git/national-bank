@@ -2,6 +2,7 @@ package lk.jiat.bank.core.model;
 
 import jakarta.persistence.*;
 
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
         @NamedQuery(name = "Transaction.findTransactionByUserId", query = "select t from Transaction t " +
                 "where t.fromAccount.user.id =:userId or t.toAccount.user.id=:userId order by t.timestamp desc"),
 })
-public class Transaction {
+public class Transaction  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
