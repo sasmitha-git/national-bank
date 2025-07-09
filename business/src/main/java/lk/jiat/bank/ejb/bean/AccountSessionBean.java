@@ -1,5 +1,7 @@
 package lk.jiat.bank.ejb.bean;
 
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.Stateless;
 import jakarta.ejb.TransactionAttribute;
 import jakarta.ejb.TransactionAttributeType;
@@ -33,11 +35,13 @@ public class AccountSessionBean implements AccountService{
     }
 
     @Override
+    @RolesAllowed({"ADMIN"})
     public void createAccount(Account account) {
         em.persist(account);
     }
 
     @Override
+    @RolesAllowed({"ADMIN"})
     public void updateAccount(Account account) {
         em.merge(account);
     }
@@ -49,6 +53,7 @@ public class AccountSessionBean implements AccountService{
     }
 
     @Override
+    @PermitAll
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public void debitFromAccount(String accountNo, Double amount) {
         Account account = getAccountByAccountNumber(accountNo);
@@ -59,6 +64,7 @@ public class AccountSessionBean implements AccountService{
     }
 
     @Override
+    @PermitAll
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public void creditToAccount(String accountNo, Double amount) {
         Account account = getAccountByAccountNumber(accountNo);

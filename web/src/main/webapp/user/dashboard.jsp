@@ -65,6 +65,42 @@
     </div>
 
 
+    <div class="scheduled-transfer-container">
+        <input type="checkbox" id="scheduleToggle" class="toggle-checkbox">
+        <label for="scheduleToggle" class="toggle-header">
+            <h2>Schedule Future Transfer</h2>
+        </label>
+
+        <div class="scheduled-transfer-wrapper">
+            <div class="scheduled-transfer-form">
+                <form method="POST" action="${pageContext.request.contextPath}/schedule-transfer">
+                    <div class="form-group">
+                        <label>From Account:</label>
+                        <select name="fromAccount" class="form-control" required>
+                            <c:forEach items="${sessionScope.accounts}" var="account">
+                                <option value="${account.accountNumber}">${account.accountNumber}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>To Account:</label>
+                        <input type="text" name="toAccount" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount:</label>
+                        <input type="number" name="amount" step="0.01" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Schedule Date/Time:</label>
+                        <input type="datetime-local" name="scheduleTime" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn schedule-btn">Schedule Transfer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
     <div class="transaction-history">
         <h2>Recent Transactions</h2>
         <table class="transaction-table">

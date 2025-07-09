@@ -1,5 +1,7 @@
 package lk.jiat.bank.ejb.bean;
 
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.ejb.TransactionAttribute;
@@ -29,6 +31,7 @@ public class TransactionSessionBean implements TransactionService {
     private AccountService accountService;
 
     @Override
+    @PermitAll
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void transferFunds(String fromAccountNo, String toAccountNo, Double amount) {
 
@@ -59,7 +62,7 @@ public class TransactionSessionBean implements TransactionService {
     }
 
 
-
+    @RolesAllowed({"ADMIN","CUSTOMER"})
     public List<TransactionDTO> getTransactionsDTOByUserId(Long userId) {
         List<Transaction> transactions = em.createNamedQuery("Transaction.findTransactionByUserId", Transaction.class)
                 .setParameter("userId", userId).getResultList();
