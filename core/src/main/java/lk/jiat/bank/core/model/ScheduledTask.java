@@ -2,6 +2,7 @@ package lk.jiat.bank.core.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
         @NamedQuery(name = "ScheduledTask.findScheduledTaskByUserId" ,query = "select t from ScheduledTask t " +
                 "where t.userId=:userId and t.status=:status"),
 })
-public class ScheduledTask {
+public class ScheduledTask implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

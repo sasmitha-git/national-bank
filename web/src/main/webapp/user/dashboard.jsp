@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/customer_dashboard.css">
 </head>
 <body>
+<input type="hidden" id="userId" value="${sessionScope.user}" />
 
 <div class="dashboard-container">
     <div class="header">
@@ -99,6 +100,20 @@
             </div>
         </div>
     </div>
+
+    <table class="transaction-table">
+        <thead>
+        <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Next Execution</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody id="scheduledTaskTableBody"></tbody>
+    </table>
 
 
     <div class="transaction-history">
