@@ -4,6 +4,7 @@
         <jta-data-source>jdbc_national_bank</jta-data-source>
         <class>lk.jiat.bank.core.model.User</class>
         <class>lk.jiat.bank.core.model.Account</class>
+        <class>lk.jiat.bank.core.model.ScheduledTask</class>
 
 
         <properties>
