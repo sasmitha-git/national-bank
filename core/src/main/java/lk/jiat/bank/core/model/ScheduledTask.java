@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @NamedQueries({
         @NamedQuery(name = "ScheduledTask.findScheduledTaskByUserId" ,query = "select t from ScheduledTask t " +
                 "where t.userId=:userId and t.status=:status"),
+        @NamedQuery(name = "ScheduledTask.findAllScheduledTaskByUserId",query = "select t from ScheduledTask t " +
+                "where t.userId=:userId order by t.nextExecutionTime desc"),
 })
 public class ScheduledTask implements Serializable {
 

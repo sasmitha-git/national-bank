@@ -10,27 +10,31 @@
 <head>
     <title>National Bank | Login</title>
     <link rel="icon" href="${pageContext.request.contextPath}/resources/images/logo.png">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login.css">
 </head>
 <body>
+<div class="login-container">
+    <img src="${pageContext.request.contextPath}/resources/images/logo.png" alt="National Bank Logo" class="logo">
+    <h1>Login to Your Account</h1>
 
-<h1>National Bank Login to your account.</h1>
+    <form method="POST" action="${pageContext.request.contextPath}/login">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" placeholder="Enter your email">
+        </div>
 
-<form method="POST" action="${pageContext.request.contextPath}/login">
-    <table>
-        <tr>
-            <th>Email</th>
-            <td><input type="text" name="email"></td>
-        </tr>
-        <tr>
-            <th>Password</th>
-            <td><input type="password" name="password"></td>
-        </tr>
-        <tr>
-            <td><input type="submit" value="login"></td>
-        </tr>
-    </table>
-</form>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password">
+            <a href="#" class="forgot-password">Forgot password?</a>
+        </div>
 
+        <input type="submit" value="Sign In">
+    </form>
 
+    <div class="footer">
+        © 2023 National Bank. All rights reserved.
+    </div>
+</div>
 </body>
 </html>

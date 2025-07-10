@@ -26,7 +26,7 @@ public class ScheduledTaskResource {
             return Response.status(Response.Status.BAD_REQUEST).entity("userId is null").build();
         }
 
-        List<ScheduledTask> scheduledTasks = scheduleService.getActiveTasks(userId);
+        List<ScheduledTask> scheduledTasks = scheduleService.getAllScheduledTasks(userId);
 
         List<ScheduleTaskDTO> dtos = scheduledTasks.stream().map(task -> {
             ScheduleTaskDTO dto = new ScheduleTaskDTO();

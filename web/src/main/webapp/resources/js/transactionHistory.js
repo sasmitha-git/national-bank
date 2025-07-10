@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', ()=>{
     getTransactionHistory();
+    getAccounts();
+    getScheduledTasks();
 });
 
 async function getTransactionHistory(){
@@ -35,30 +37,39 @@ function showTransactions(history){
 
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    const userId = document.getElementById("userId").value;
-    fetch(`/national-bank/api/scheduled-tasks?userId=${userId}`)
-        .then(response => response.json())
-        .then(tasks => {
-            const table = document.getElementById("scheduledTaskTableBody");
-            tasks.forEach(task => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                        <td>${task.fromAccount.accountNumber}</td>
-                        <td>${task.toAccount.accountNumber}</td>
-                        <td>${task.amount}</td>
-                        <td>${task.status}</td>
-                        <td>${task.nextExecutionTime}</td>
-                        <td>
-                            ${task.status === "ACTIVE"
-                    ? `<button onclick="cancelTask(${task.id})">Cancel</button>`
-                    : "N/A"}
-                        </td>
-                    `;
-                table.appendChild(row);
-            });
+async function getScheduledTasks() {
+    try {
+        const userId = document.getElementById("userId").value;
+        const response = await fetch(`/national-bank/api/scheduled-tasks?userId=${userId}`);
+        const tasks = await response.json();
+
+        const table = document.getElementById("scheduledTaskTableBody");
+        table.innerHTML = ""; // clear existing rows
+
+        tasks.forEach(task => {
+            const row = document.createElement("tr");
+            const dateTime = new Date(task.nextExecutionTime).toLocaleString();
+
+            const actionColumn = task.status === "ACTIVE"
+                ? `<button onclick="cancelTask(${task.id})">Cancel</button>`
+                : `<button disabled style="background-color: #ccc; cursor: not-allowed;">Completed</button>`;
+
+            row.innerHTML = `
+                <td>${task.fromAccount}</td>
+                <td>${task.toAccount}</td>
+                <td>${task.amount}</td>
+                <td>${task.status}</td>
+                <td>${dateTime}</td>
+                <td>${actionColumn}</td>
+            `;
+
+            table.appendChild(row);
         });
-});
+
+    } catch (error) {
+        console.error("Error loading scheduled tasks:", error);
+    }
+}
 
 function cancelTask(taskId) {
     fetch(`/national-bank/api/scheduled-tasks/${taskId}`, {
@@ -67,3 +78,27 @@ function cancelTask(taskId) {
 }
 
 
+async function getAccounts(){
+    try{
+        const userId = document.getElementById("userId")?.value;
+        if(!userId) throw new Error("User Id Not Found");
+
+        const response = await fetch(`/national-bank/api/accounts?userId=${userId}`);
+        if(!response.ok) throw new Error("Failed to get accounts");
+
+        const accounts = await response.json();
+        const grid = document.getElementById("accountGrid");
+        grid.innerHTML = accounts.map(account =>`
+        
+        <div class="account-card">
+        <h3>${account.accountType} Account</h3>
+        <p>Account Number: ${account.accountNumber}</p>
+        <p>Balance: ${account.balance}</p>
+        </div>
+        
+        `).join('');
+    }catch (error){
+
+        console.log("Error loading .......", error.message);
+    }
+}

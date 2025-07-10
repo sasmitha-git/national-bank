@@ -90,6 +90,12 @@ public class TimerSessionBean implements ScheduleService {
     }
 
     @Override
+    public List<ScheduledTask> getAllScheduledTasks(Long userId) {
+        return em.createNamedQuery("ScheduledTask.findAllScheduledTaskByUserId",ScheduledTask.class)
+                .setParameter("userId",userId).getResultList();
+    }
+
+    @Override
     public void cancelScheduledTask(Long taskId) {
         ScheduledTask scheduledTask = em.find(ScheduledTask.class, taskId);
         if(scheduledTask != null && scheduledTask.getStatus() == ScheduleStatus.ACTIVE) {

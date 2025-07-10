@@ -10,6 +10,7 @@ public interface ScheduleService {
 
     Long scheduleTransfer(ScheduledTask scheduledTask, long delayInMillis);
     List<ScheduledTask> getActiveTasks(Long userId);
+    List<ScheduledTask> getAllScheduledTasks(Long userId);
     void cancelScheduledTask(Long taskId);
 
 }

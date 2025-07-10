@@ -31,13 +31,7 @@
         <h1>Welcome, ${pageContext.request.userPrincipal.name}</h1>
         <h2>Your Accounts</h2>
         <div class="account-grid" id="accountGrid">
-            <c:forEach items="${sessionScope.accounts}" var="account">
-                <div class="account-card">
-                    <h3>${account.accountType} Account</h3>
-                    <p>Account Number: ${account.accountNumber}</p>
-                    <p>Balance: ${account.balance}</p>
-                </div>
-            </c:forEach>
+
         </div>
     </div>
 
@@ -65,13 +59,30 @@
         </form>
     </div>
 
+    <div class="transaction-history">
+        <h2>Recent Transactions</h2>
+        <div class="table-container">
+            <table class="transaction-table">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody id="transactionTableBody">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <div class="scheduled-transfer-container">
         <input type="checkbox" id="scheduleToggle" class="toggle-checkbox">
         <label for="scheduleToggle" class="toggle-header">
             <h2>Schedule Future Transfer</h2>
         </label>
-
         <div class="scheduled-transfer-wrapper">
             <div class="scheduled-transfer-form">
                 <form method="POST" action="${pageContext.request.contextPath}/schedule-transfer">
@@ -101,37 +112,25 @@
         </div>
     </div>
 
-    <table class="transaction-table">
-        <thead>
-        <tr>
-            <th>From</th>
-            <th>To</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Next Execution</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody id="scheduledTaskTableBody"></tbody>
-    </table>
-
-
     <div class="transaction-history">
-        <h2>Recent Transactions</h2>
-        <table class="transaction-table">
-            <thead>
-            <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-            <tbody id="transactionTableBody">
-
-            </tbody>
-        </table>
+        <h2>Scheduled Transactions</h2>
+        <div class="table-container">
+            <table class="transaction-table">
+                <thead>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Next Execution</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="scheduledTaskTableBody"></tbody>
+            </table>
+        </div>
     </div>
+
 </div>
 
 <script src="${pageContext.request.contextPath}/resources/js/transactionHistory.js"></script>
