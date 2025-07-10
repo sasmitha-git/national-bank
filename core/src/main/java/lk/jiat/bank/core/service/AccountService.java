@@ -14,6 +14,7 @@ public interface AccountService {
     void updateAccount(Account account);
 
     List<Account> getAccountsByUserId(Long id);
+    List<Account> getAllSavingAccounts();
 
     void debitFromAccount(String accountNo, Double amount);
     void creditToAccount(String accountNo, Double amount);

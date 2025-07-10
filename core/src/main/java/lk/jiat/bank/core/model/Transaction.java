@@ -30,7 +30,12 @@ public class Transaction implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionStatus status;
-    private LocalDateTime timestamp = LocalDateTime.now();
+    private LocalDateTime timestamp;
+
+    @PrePersist
+    public void onTransaction() {
+        timestamp = LocalDateTime.now();
+    }
 
     public Transaction() {
 

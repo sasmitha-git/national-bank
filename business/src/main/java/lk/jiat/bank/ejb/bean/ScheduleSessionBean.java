@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Singleton
-public class TimerSessionBean implements ScheduleService {
+public class ScheduleSessionBean implements ScheduleService {
 
    @Resource
    private TimerService timerService;

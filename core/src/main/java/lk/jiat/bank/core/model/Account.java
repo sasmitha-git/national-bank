@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NamedQueries({
         @NamedQuery(name = "Account.findByAccountNumber" ,query = "select  a from Account a where a.accountNumber=:accNo"),
         @NamedQuery(name = "Account.findAccountByUserId",query = "select  a from Account a where  a.user.id =:userId"),
+        @NamedQuery(name = "Account.findSavingAccounts", query = "select a from Account a where a.accountType=:type"),
 })
 public class Account implements Serializable {
     @Id

@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import lk.jiat.bank.core.model.Account;
+import lk.jiat.bank.core.model.AccountType;
 import lk.jiat.bank.core.service.AccountService;
 
 import java.util.List;
@@ -50,6 +51,12 @@ public class AccountSessionBean implements AccountService{
     public List<Account> getAccountsByUserId(Long id) {
         return em.createNamedQuery("Account.findAccountByUserId",Account.class)
                 .setParameter("userId",id).getResultList();
+    }
+
+    @Override
+    public List<Account> getAllSavingAccounts() {
+        return em.createNamedQuery("Account.findSavingAccounts", Account.class)
+                .setParameter("type", AccountType.SAVING).getResultList();
     }
 
     @Override

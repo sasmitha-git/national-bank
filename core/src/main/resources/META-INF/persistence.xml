@@ -5,6 +5,7 @@
         <class>lk.jiat.bank.core.model.User</class>
         <class>lk.jiat.bank.core.model.Account</class>
         <class>lk.jiat.bank.core.model.ScheduledTask</class>
+        <class>lk.jiat.bank.core.model.Interest</class>
 
 
         <properties>
