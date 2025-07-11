@@ -16,6 +16,7 @@ import lk.jiat.bank.core.model.TransactionType;
 import lk.jiat.bank.core.service.AccountService;
 import lk.jiat.bank.core.service.TransactionService;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,40 @@ public class TransactionSessionBean implements TransactionService {
         }
 
         return dtoList;
+    }
+
+    @Override
+    @RolesAllowed({"ADMIN"})
+    public List<TransactionDTO> getAllTransactionsDTO() {
+      List<Transaction>  transactions = em.createNamedQuery("Transaction.findAllTransactions", Transaction.class)
+                .getResultList();
+
+      List<TransactionDTO> dtoList = new ArrayList<>();
+
+      for (Transaction transaction : transactions) {
+
+          TransactionDTO dto = new TransactionDTO();
+          dto.setTimestamp(String.valueOf(transaction.getTimestamp()));
+          dto.setFromAccountNumber(transaction.getFromAccount().getAccountNumber());
+          dto.setToAccountNumber(transaction.getToAccount().getAccountNumber());
+          dto.setAmount(transaction.getAmount());
+          dto.setTransactionType(transaction.getTransactionType().toString());
+          dto.setStatus(transaction.getStatus().toString());
+
+          dtoList.add(dto);
+      }
+
+        return dtoList;
+    }
+
+    @Override
+    @RolesAllowed({"ADMIN"})
+    public long countTransactionsToday() {
+        LocalDate today = LocalDate.now();
+
+        return em.createNamedQuery("Transaction.countByTodayTransaction", Long.class)
+                .setParameter("CURRENT_DAY", today)
+                .getSingleResult();
     }
 
 

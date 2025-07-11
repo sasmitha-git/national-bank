@@ -9,7 +9,11 @@ public class AccountDTO implements Serializable {
     private String accountNumber;
     private String accountType;
     private double balance;
+    private String userFullName;
 
+    public AccountDTO() {
+
+    }
 
     public AccountDTO(Account account) {
         this.accountNumber = account.getAccountNumber();
@@ -39,5 +43,13 @@ public class AccountDTO implements Serializable {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public String getUserFullName() {
+        return userFullName;
+    }
+
+    public void setUserFullName(String userFullName) {
+        this.userFullName = userFullName;
     }
 }

@@ -10,6 +10,7 @@ import java.io.Serializable;
         @NamedQuery(name = "User.findByEmail", query = "select u from User u where u.email =:email and u.active = true"),
         @NamedQuery(name = "User.findByEmailAndPassword", query = "select u from User u where u.email=:email " +
                 "and u.password=:password and u.active = true"),
+        @NamedQuery(name = "User.findByUserRole", query = "select u from User u where u.userRole=:role"),
 })
 @Cacheable(false)
 public class User implements Serializable  {

@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @NamedQueries({
         @NamedQuery(name = "Transaction.findTransactionByUserId", query = "select t from Transaction t " +
                 "where t.fromAccount.user.id =:userId or t.toAccount.user.id=:userId order by t.timestamp desc"),
+        @NamedQuery(name = "Transaction.countByTodayTransaction", query = "select count(t) from Transaction t where function('date',t.timestamp) =:CURRENT_DAY"),
+        @NamedQuery(name = "Transaction.findAllTransactions", query = "select t from Transaction t"),
 })
 public class Transaction implements Serializable {
 

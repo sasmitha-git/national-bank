@@ -27,8 +27,8 @@ public class DailyInterestSessionBean {
     @EJB
     private AccountService accountService;
 
-//    @Schedule(hour = "23", minute = "59", second = "0", persistent = false)
-    @Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
+//    @Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
+    @Schedule(hour = "23", minute = "59", second = "0", persistent = false)
     @Timeout
     public void calculateDailyInterest() {
 

@@ -1,6 +1,7 @@
 package lk.jiat.bank.core.service;
 
 import jakarta.ejb.Remote;
+import lk.jiat.bank.core.dto.AccountDTO;
 import lk.jiat.bank.core.model.Account;
 
 import java.util.List;
@@ -15,8 +16,10 @@ public interface AccountService {
 
     List<Account> getAccountsByUserId(Long id);
     List<Account> getAllSavingAccounts();
+    List<AccountDTO> getAllAccountsDTO();
 
     void debitFromAccount(String accountNo, Double amount);
     void creditToAccount(String accountNo, Double amount);
 
+    double getTotalDeposits();
 }

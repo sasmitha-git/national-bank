@@ -6,8 +6,13 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import lk.jiat.bank.core.dto.UserDTO;
 import lk.jiat.bank.core.model.User;
+import lk.jiat.bank.core.model.UserRole;
 import lk.jiat.bank.core.service.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 public class UserSessionBean implements UserService {
@@ -25,6 +30,31 @@ public class UserSessionBean implements UserService {
     public User getUserByEmail(String email) {
         return em.createNamedQuery("User.findByEmail", User.class)
                 .setParameter("email", email).getSingleResult();
+    }
+
+    @RolesAllowed({"ADMIN"})
+    @Override
+    public List<UserDTO> getAllCustomers() {
+       List<User> users =  em.createNamedQuery("User.findByUserRole", User.class)
+                .setParameter("role", UserRole.CUSTOMER)
+                .getResultList();
+
+       List<UserDTO> userDTOs = new ArrayList<>();
+
+       for (User user : users) {
+           UserDTO dto = new UserDTO();
+           dto.setId(user.getId());
+           dto.setFullName(user.getFullName());
+           dto.setEmail(user.getEmail());
+           dto.setPhone(user.getPhone());
+           dto.setUserRole(user.getUserRole());
+           dto.setActive(user.isActive());
+
+           userDTOs.add(dto);
+
+       }
+
+        return userDTOs;
     }
 
     @RolesAllowed({"ADMIN"})

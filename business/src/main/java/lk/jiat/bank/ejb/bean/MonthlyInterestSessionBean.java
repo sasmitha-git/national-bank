@@ -20,8 +20,9 @@ public class MonthlyInterestSessionBean {
     @EJB
     private AccountService accountService;
 
-//    @Schedule(dayOfMonth = "Last", hour = "", minute = "", second = "", persistent = false)
-    @Schedule(hour = "*", minute = "*/1", second = "0", persistent = false)
+//    @Schedule(hour = "*", minute = "*/1", second = "0", persistent = false)
+
+    @Schedule(dayOfMonth = "Last", hour = "23", minute = "59", second = "0", persistent = false)
     @Timeout
     public void creditMonthlyInterest() {
         List<Account> savingAccounts = accountService.getAllSavingAccounts();

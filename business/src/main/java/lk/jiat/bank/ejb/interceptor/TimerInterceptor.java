@@ -2,6 +2,7 @@ package lk.jiat.bank.ejb.interceptor;
 
 import jakarta.annotation.Priority;
 import jakarta.interceptor.AroundInvoke;
+import jakarta.interceptor.AroundTimeout;
 import jakarta.interceptor.Interceptor;
 import jakarta.interceptor.InvocationContext;
 import lk.jiat.bank.ejb.annotation.TimeoutLogger;
@@ -11,10 +12,12 @@ import lk.jiat.bank.ejb.annotation.TimeoutLogger;
 @Priority(1)
 public class TimerInterceptor {
 
-    @AroundInvoke
-    public Object aroundTimeout(InvocationContext context) throws Throwable {
+
+    @AroundTimeout
+    public Object aroundTimeout(InvocationContext context) throws Exception {
         System.out.println("TimerInterceptor.aroundTimeout...........");
         return context.proceed();
     }
+
 
 }

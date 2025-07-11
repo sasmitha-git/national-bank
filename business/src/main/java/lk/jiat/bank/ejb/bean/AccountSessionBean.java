@@ -8,10 +8,12 @@ import jakarta.ejb.TransactionAttributeType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import lk.jiat.bank.core.dto.AccountDTO;
 import lk.jiat.bank.core.model.Account;
 import lk.jiat.bank.core.model.AccountType;
 import lk.jiat.bank.core.service.AccountService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -60,6 +62,28 @@ public class AccountSessionBean implements AccountService{
     }
 
     @Override
+    @RolesAllowed({"ADMIN"})
+    public List<AccountDTO> getAllAccountsDTO() {
+       List<Account> accounts = em.createNamedQuery("Account.findAllAccounts", Account.class)
+                .setParameter("bankAccountType", AccountType.BANK)
+                .getResultList();
+
+       List<AccountDTO> accountDTOS = new ArrayList<AccountDTO>();
+
+       for (Account account : accounts) {
+           AccountDTO dto = new AccountDTO();
+           dto.setAccountNumber(account.getAccountNumber());
+           dto.setAccountType(account.getAccountType().toString());
+           dto.setBalance(account.getBalance());
+           dto.setUserFullName(account.getUser().getFullName());
+
+           accountDTOS.add(dto);
+       }
+
+        return accountDTOS;
+    }
+
+    @Override
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public void debitFromAccount(String accountNo, Double amount) {
@@ -79,5 +103,12 @@ public class AccountSessionBean implements AccountService{
             account.setBalance(account.getBalance() + amount);
             em.merge(account);
         }
+    }
+
+    @Override
+    @RolesAllowed({"ADMIN"})
+    public double getTotalDeposits() {
+        return em.createNamedQuery("Account.findSumByAccountBalance",double.class)
+                .getSingleResult();
     }
 }
