@@ -6,7 +6,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.jiat.bank.core.mail.WelcomeMessage;
 import lk.jiat.bank.core.model.User;
+import lk.jiat.bank.core.provider.MailServiceProvider;
 import lk.jiat.bank.core.service.UserService;
 
 import java.io.IOException;
@@ -33,6 +35,9 @@ public class Register extends HttpServlet {
         user.setPassword(password);
 
         userService.addUser(user);
+
+        WelcomeMessage welcomeMessage = new WelcomeMessage(email,name,password);
+        MailServiceProvider.getInstance().sendmail(welcomeMessage);
 
         response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp");
 

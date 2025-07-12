@@ -8,7 +8,6 @@ import jakarta.security.enterprise.authentication.mechanism.http.AuthenticationP
 import jakarta.security.enterprise.authentication.mechanism.http.AutoApplySession;
 import jakarta.security.enterprise.authentication.mechanism.http.HttpAuthenticationMechanism;
 import jakarta.security.enterprise.authentication.mechanism.http.HttpMessageContext;
-import jakarta.security.enterprise.credential.Credential;
 import jakarta.security.enterprise.identitystore.CredentialValidationResult;
 import jakarta.security.enterprise.identitystore.IdentityStore;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +25,6 @@ public class AuthMechanism implements HttpAuthenticationMechanism {
     @Override
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext context) throws AuthenticationException {
 
-
         AuthenticationParameters authParameters = context.getAuthParameters();
 
         if(authParameters.getCredential() != null) {
@@ -37,7 +35,6 @@ public class AuthMechanism implements HttpAuthenticationMechanism {
             }else{
                 return AuthenticationStatus.SEND_FAILURE;
             }
-
         }
 
         if(context.isProtected() && context.getCallerPrincipal() == null) {
@@ -47,8 +44,6 @@ public class AuthMechanism implements HttpAuthenticationMechanism {
                 throw new RuntimeException("Redirect failed", e);
             }
         }
-
-
         return context.doNothing();
     }
 

@@ -55,6 +55,7 @@ public class ScheduleTransfer extends HttpServlet {
             }
 
             Long userId = (Long) request.getSession().getAttribute("user");
+
             if(userId == null){
                 throw new IllegalStateException("User not found");
             }

@@ -209,9 +209,6 @@
     <div class="dashboard-section">
         <div class="section-header">
             <h2 class="section-title"><i class="fa-solid fa-money-check-dollar"></i> Recent Transactions</h2>
-            <div class="view-all">
-                <a href="#">View All Transactions <i class="fas fa-arrow-right"></i></a>
-            </div>
         </div>
         <div class="section-content">
             <table class="usersTable">

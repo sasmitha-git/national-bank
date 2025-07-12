@@ -14,6 +14,8 @@ import lk.jiat.bank.core.util.Env;
 import lk.jiat.bank.ejb.annotation.TimeoutLogger;
 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class DailyInterestSessionBean {
     private AccountService accountService;
 
 //    @Schedule(hour = "*", minute = "*", second = "*/10", persistent = false)
+
     @Schedule(hour = "23", minute = "59", second = "0", persistent = false)
     @Timeout
     public void calculateDailyInterest() {
@@ -38,10 +41,12 @@ public class DailyInterestSessionBean {
         for (Account account : savingAccounts) {
             double interestAmount = account.getBalance() * (rate/30);
 
+            BigDecimal roundInterestAmount = BigDecimal.valueOf(interestAmount).setScale(2, RoundingMode.HALF_UP);
+
             Interest interest = new Interest();
             interest.setAccount(account);
             interest.setDate(LocalDateTime.now());
-            interest.setBalance(interestAmount);
+            interest.setBalance(roundInterestAmount.doubleValue());
             em.persist(interest);
         }
 

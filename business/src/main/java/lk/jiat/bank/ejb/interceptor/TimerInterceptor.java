@@ -7,8 +7,8 @@ import jakarta.interceptor.Interceptor;
 import jakarta.interceptor.InvocationContext;
 import lk.jiat.bank.ejb.annotation.TimeoutLogger;
 
-@TimeoutLogger
 @Interceptor
+@TimeoutLogger
 @Priority(1)
 public class TimerInterceptor {
 

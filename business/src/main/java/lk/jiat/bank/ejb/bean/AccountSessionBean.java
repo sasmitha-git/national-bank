@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import lk.jiat.bank.core.dto.AccountDTO;
+import lk.jiat.bank.core.exception.TransferFailedException;
 import lk.jiat.bank.core.model.Account;
 import lk.jiat.bank.core.model.AccountType;
 import lk.jiat.bank.core.service.AccountService;
@@ -83,15 +84,23 @@ public class AccountSessionBean implements AccountService{
         return accountDTOS;
     }
 
+
     @Override
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public void debitFromAccount(String accountNo, Double amount) {
         Account account = getAccountByAccountNumber(accountNo);
-        if(account != null && account.getBalance() >= amount){
-            account.setBalance(account.getBalance() - amount);
-            em.merge(account);
+        if(account == null){
+            throw new TransferFailedException("Account not found");
         }
+        if (amount == null || amount <= 0) {
+            throw new TransferFailedException("Invalid debit amount");
+        }
+        if(account.getBalance() < amount){
+            throw new TransferFailedException("Insufficient balance");
+        }
+        account.setBalance(account.getBalance() - amount);
+        em.merge(account);
     }
 
     @Override
@@ -104,6 +113,8 @@ public class AccountSessionBean implements AccountService{
             em.merge(account);
         }
     }
+
+
 
     @Override
     @RolesAllowed({"ADMIN"})

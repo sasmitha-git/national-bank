@@ -9,6 +9,7 @@ import jakarta.ejb.TransactionAttributeType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lk.jiat.bank.core.dto.TransactionDTO;
+import lk.jiat.bank.core.exception.TransferFailedException;
 import lk.jiat.bank.core.model.Account;
 import lk.jiat.bank.core.model.Transaction;
 import lk.jiat.bank.core.model.TransactionStatus;
@@ -36,21 +37,29 @@ public class TransactionSessionBean implements TransactionService {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void transferFunds(String fromAccountNo, String toAccountNo, Double amount) {
 
+
         if (fromAccountNo == null || toAccountNo == null) {
-            throw new IllegalArgumentException("Invalid account number");
+            throw new TransferFailedException("Invalid account number");
         }
 
-        if(amount == null || amount <= 0){
-            throw new IllegalArgumentException("Amount must be greater than 0");
+        if(fromAccountNo.equals(toAccountNo)){
+            throw new TransferFailedException("Cannot transfer to the same account");
         }
 
-        accountService.debitFromAccount(fromAccountNo, amount);
-        accountService.creditToAccount(toAccountNo, amount);
+        if(amount <= 50){
+            throw new TransferFailedException("Amount must be greater than Rs.50.0");
+        }
+
 
         Account sourceAccountNo = accountService.getAccountByAccountNumber(fromAccountNo);
         Account destinationAccountNo = accountService.getAccountByAccountNumber(toAccountNo);
 
+        if(sourceAccountNo.getBalance() < amount){
+            throw new TransferFailedException("Insufficient funds");
+        }
 
+        accountService.debitFromAccount(fromAccountNo, amount);
+        accountService.creditToAccount(toAccountNo, amount);
 
         Transaction transaction = new Transaction(
                 sourceAccountNo,
@@ -69,9 +78,6 @@ public class TransactionSessionBean implements TransactionService {
                 .setParameter("userId", userId).getResultList();
 
         List<TransactionDTO> dtoList = new ArrayList<>();
-
-
-
 
         for (Transaction transaction : transactions) {
             String fromAccountNumber = transaction.getFromAccount().getAccountNumber();

@@ -9,3 +9,11 @@ function closeModal() {
     document.getElementById("userModal").style.display = "none";
     document.querySelectorAll('#userForm input, #userForm select').forEach(el => el.disabled = false);
 }
+
+function openProfileModal() {
+    document.getElementById('profileModal').style.display = 'block';
+}
+
+function closeProfileModal() {
+    document.getElementById('profileModal').style.display = 'none';
+}

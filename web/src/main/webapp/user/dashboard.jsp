@@ -14,18 +14,26 @@
     <title>National Bank</title>
     <link rel="icon" href="${pageContext.request.contextPath}/resources/images/logo.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/customer_dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 <input type="hidden" id="userId" value="${sessionScope.user}" />
 
 <div class="dashboard-container">
     <div class="header">
-       <div class="logo-section">
-           <img src="${pageContext.request.contextPath}/resources/images/logo.png" alt="National Bank" class="logo-icon">
-           <h2>National Bank </h2>
-       </div>
-           <a href="${pageContext.request.contextPath}/logout" class="logout-link">Logout</a>
+        <div class="logo-section">
+            <img src="${pageContext.request.contextPath}/resources/images/logo.png" alt="National Bank" class="logo-icon">
+            <h2>National Bank</h2>
+        </div>
+
+        <div class="header-actions">
+            <a href="#" class="user-profile-btn" onclick="openProfileModal()">
+                <i class="fas fa-user-circle"></i>
+            </a>
+            <a href="${pageContext.request.contextPath}/logout" class="logout-link">Logout</a>
+        </div>
     </div>
+
 
     <div class="account-summary">
         <h1>Welcome, ${pageContext.request.userPrincipal.name}</h1>
@@ -37,7 +45,7 @@
 
 
     <div class="transfer-form">
-        <h2>Transfer Funds</h2>
+        <h2><i class="fas fa-users"></i> Transfer Funds</h2>
         <form method="POST"  action="${pageContext.request.contextPath}/transfer" >
             <div class="form-group">
                 <label>From Account:</label>
@@ -133,6 +141,56 @@
 
 </div>
 
+<!-- User Profile Modal -->
+<div id="profileModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-user-circle"></i> My Profile</h3>
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="${pageContext.request.contextPath}/update-profile" class="profile-form">
+                <input type="hidden" name="userId" value="">
+
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Full Name</label>
+                    <div class="readonly-field"></div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Email</label>
+                    <div class="readonly-field"></div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-phone"></i> Phone</label>
+                    <div class="readonly-field"></div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> New Password</label>
+                    <input type="password" name="newPassword" placeholder="Enter new password" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Confirm Password</label>
+                    <input type="password" name="confirmPassword" placeholder="Confirm new password" class="form-control">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeProfileModal()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-save"></i> Update Password
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script src="${pageContext.request.contextPath}/resources/js/transactionHistory.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/open_close.js"></script>
 </body>
 </html>

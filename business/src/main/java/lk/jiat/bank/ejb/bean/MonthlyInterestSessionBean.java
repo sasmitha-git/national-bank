@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lk.jiat.bank.core.model.*;
 import lk.jiat.bank.core.service.AccountService;
+import lk.jiat.bank.core.util.Env;
 import lk.jiat.bank.ejb.annotation.TimeoutLogger;
 
 import java.time.LocalDate;
@@ -40,7 +41,9 @@ public class MonthlyInterestSessionBean {
             if(totalInterest != null && totalInterest > 0){
                 accountService.creditToAccount(account.getAccountNumber(), totalInterest);
 
-                Account systemAccount = accountService.getAccountByAccountNumber("NBBANK0000");
+                String system_account = Env.get("system.account");
+
+                Account systemAccount = accountService.getAccountByAccountNumber(system_account);
                 if (systemAccount == null) {
                     throw new IllegalStateException("System account not found: NBBANK0000");
                 }
