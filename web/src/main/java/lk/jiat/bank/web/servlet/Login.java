@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lk.jiat.bank.core.model.User;
 import lk.jiat.bank.core.service.UserService;
+import lk.jiat.bank.core.util.Encrypt;
 
 import java.io.IOException;
 
@@ -40,8 +41,10 @@ public class Login extends HttpServlet {
             return;
         }
 
+        String encryptedPassword = Encrypt.encrypt(password);
+
         AuthenticationParameters parameters = AuthenticationParameters.withParams()
-                .credential(new UsernamePasswordCredential(email, password))
+                .credential(new UsernamePasswordCredential(email, encryptedPassword))
                 .newAuthentication(true);
 
         AuthenticationStatus status = securityContext.authenticate(request, response, parameters);

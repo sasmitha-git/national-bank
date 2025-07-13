@@ -69,6 +69,16 @@ public class UserSessionBean implements UserService {
         em.merge(user);
     }
 
+    @PermitAll
+    @Override
+    public void passwordUpdate(Long id, String newPassword) {
+        User user = em.find(User.class, id);
+        if(user != null) {
+            user.setPassword(newPassword);
+            em.merge(user);
+        }
+    }
+
     @RolesAllowed("ADMIN")
     @Override
     public void deactivateUser(Long id) {

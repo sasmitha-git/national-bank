@@ -27,10 +27,12 @@
         </div>
 
         <div class="header-actions">
-            <a href="#" class="user-profile-btn" onclick="openProfileModal()">
+            <button type="button" class="user-profile-btn" onclick="openProfileModal()">
                 <i class="fas fa-user-circle"></i>
+            </button>
+            <a href="${pageContext.request.contextPath}/logout" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
             </a>
-            <a href="${pageContext.request.contextPath}/logout" class="logout-link">Logout</a>
         </div>
     </div>
 
@@ -142,46 +144,51 @@
 </div>
 
 <!-- User Profile Modal -->
-<div id="profileModal" class="modal" style="display:none;">
+<c:set var="userDTO" value="${sessionScope.userDTO}"/>
+<div id="profileModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <h3><i class="fas fa-user-circle"></i> My Profile</h3>
-            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <span class="close-btn" onclick="closeProfileModal()">&times;</span>
         </div>
         <div class="modal-body">
-            <form method="POST" action="${pageContext.request.contextPath}/update-profile" class="profile-form">
-                <input type="hidden" name="userId" value="">
+            <form method="POST" action="${pageContext.request.contextPath}/send-verification-code" class="profile-form">
+                <input type="hidden" name="userId" value="${userDTO.id}">
 
                 <div class="form-group">
                     <label><i class="fas fa-user"></i> Full Name</label>
-                    <div class="readonly-field"></div>
+                    <div class="readonly-field">${userDTO.fullName}</div>
                 </div>
 
                 <div class="form-group">
                     <label><i class="fas fa-envelope"></i> Email</label>
-                    <div class="readonly-field"></div>
+                    <div class="readonly-field">${userDTO.email}</div>
                 </div>
 
                 <div class="form-group">
                     <label><i class="fas fa-phone"></i> Phone</label>
-                    <div class="readonly-field"></div>
+                    <div class="readonly-field">${userDTO.phone}</div>
                 </div>
 
                 <div class="form-group">
                     <label><i class="fas fa-lock"></i> New Password</label>
-                    <input type="password" name="newPassword" placeholder="Enter new password" class="form-control">
+                    <label>
+                        <input type="password" name="newPassword" placeholder="Enter new password" class="form-control" required>
+                    </label>
                 </div>
 
                 <div class="form-group">
                     <label><i class="fas fa-lock"></i> Confirm Password</label>
-                    <input type="password" name="confirmPassword" placeholder="Confirm new password" class="form-control">
+                    <label>
+                        <input type="password" name="confirmPassword" placeholder="Confirm new password" class="form-control" required>
+                    </label>
                 </div>
 
                 <div class="form-actions">
                     <button type="button" class="cancel-btn" onclick="closeProfileModal()">
                         <i class="fas fa-times"></i> Cancel
                     </button>
-                    <button type="submit" class="submit-btn">
+                    <button type="submit" class="submit-btn" onclick="openVerificationModal()">
                         <i class="fas fa-save"></i> Update Password
                     </button>
                 </div>
@@ -189,6 +196,55 @@
         </div>
     </div>
 </div>
+
+<!-- Verification Code Modal -->
+<div id="verificationModal" class="modal">
+    <div class="modal-content verification-modal">
+        <div class="modal-header">
+            <h3><i class="fas fa-shield-alt"></i> Verify Your Identity</h3>
+            <span class="close-btn" onclick="closeVerificationModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="${pageContext.request.contextPath}/verified-update-password" id="verificationForm" class="profile-form">
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Verification Code</label>
+                    <p class="verification-instructions">We've sent a 6-digit code to your email. Please enter it below:</p>
+                    <div class="verification-code-input">
+                        <input
+                                type="text"
+                                name="code"
+                                maxlength="6"
+                                pattern="\d{6}"
+                                title="Enter 6-digit verification code"
+                                class="code-input"
+                                placeholder="Enter 6-digit code"
+                                required
+                                inputmode="numeric"
+                                autocomplete="one-time-code"
+                        >
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeVerificationModal()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-check"></i> Verify
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<c:if test="${not empty param.model and param.model == 'verify'}">
+    <script>
+        window.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("verificationModal").style.display = "block";
+        });
+    </script>
+</c:if>
+
 
 <script src="${pageContext.request.contextPath}/resources/js/transactionHistory.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/open_close.js"></script>

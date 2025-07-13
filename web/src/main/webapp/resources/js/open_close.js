@@ -10,10 +10,24 @@ function closeModal() {
     document.querySelectorAll('#userForm input, #userForm select').forEach(el => el.disabled = false);
 }
 
+
 function openProfileModal() {
-    document.getElementById('profileModal').style.display = 'block';
+    const modal = document.getElementById('profileModal');
+    modal.style.display = 'flex';
 }
 
 function closeProfileModal() {
-    document.getElementById('profileModal').style.display = 'none';
+    const modal = document.getElementById('profileModal');
+    modal.style.display = 'none';
+}
+
+function openVerificationModal() {
+    const modal = document.getElementById('verificationModal');
+    modal.style.display = 'flex';
+    // Focus first input field
+    document.querySelector('.code-input').focus();
+}
+
+function closeVerificationModal() {
+    document.getElementById('verificationModal').style.display = 'none';
 }

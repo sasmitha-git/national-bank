@@ -15,6 +15,7 @@ public interface UserService {
     List<UserDTO> getAllCustomers();
     void addUser(User user);
     void updateUser(User user);
+    void passwordUpdate(Long id, String newPassword);
     void deactivateUser(Long id);
     boolean isActiveUser(String email);
 

@@ -10,6 +10,7 @@ import lk.jiat.bank.core.mail.WelcomeMessage;
 import lk.jiat.bank.core.model.User;
 import lk.jiat.bank.core.provider.MailServiceProvider;
 import lk.jiat.bank.core.service.UserService;
+import lk.jiat.bank.core.util.Encrypt;
 
 import java.io.IOException;
 
@@ -28,11 +29,13 @@ public class Register extends HttpServlet {
         String password = request.getParameter("password");
 
 
+        String encryptPassword = Encrypt.encrypt(password);
+
         User user = new User();
         user.setFullName(name);
         user.setEmail(email);
         user.setPhone(phone);
-        user.setPassword(password);
+        user.setPassword(encryptPassword);
 
         userService.addUser(user);
 
