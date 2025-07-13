@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%--
   Created by IntelliJ IDEA.
   User: Asus
@@ -16,6 +17,16 @@
 <div class="login-container">
     <img src="${pageContext.request.contextPath}/resources/images/logo.png" alt="National Bank Logo" class="logo">
     <h1>Login to Your Account</h1>
+    <c:if test="${not empty param.error}">
+        <div class="error-message">
+            <c:choose>
+                <c:when test="${param.error == 'invalid'}">Invalid email or password. Please try again.</c:when>
+                <c:when test="${param.error == 'inactive'}">Your account is inactive. Please contact support.</c:when>
+                <c:when test="${param.error == 'session'}">Session expired. Please log in again.</c:when>
+                <c:when test="${param.error == 'role'}">Unauthorized access. Role mismatch.</c:when>
+            </c:choose>
+        </div>
+    </c:if>
 
     <form method="POST" action="${pageContext.request.contextPath}/login">
         <div class="form-group">

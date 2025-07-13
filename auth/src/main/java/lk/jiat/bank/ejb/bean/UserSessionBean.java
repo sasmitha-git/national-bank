@@ -28,8 +28,12 @@ public class UserSessionBean implements UserService {
 
     @Override
     public User getUserByEmail(String email) {
-        return em.createNamedQuery("User.findByEmail", User.class)
-                .setParameter("email", email).getSingleResult();
+      try{
+          return em.createNamedQuery("User.findByEmail", User.class)
+                  .setParameter("email", email).getSingleResult();
+      }catch (NoResultException e){
+          return null;
+      }
     }
 
     @RolesAllowed({"ADMIN"})
@@ -107,11 +111,20 @@ public class UserSessionBean implements UserService {
     @Override
     public boolean validate(String email, String password) {
 
-        User u = em.createNamedQuery("User.findByEmailAndPassword", User.class)
-                .setParameter("email",email)
-                .setParameter("password",password)
-                .getSingleResult();
+        try {
+            User u = em.createNamedQuery("User.findByEmailAndPassword", User.class)
+                    .setParameter("email",email)
+                    .setParameter("password",password)
+                    .getSingleResult();
 
-        return u!=null;
+            return u!=null;
+
+        }catch (NoResultException e){
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 }

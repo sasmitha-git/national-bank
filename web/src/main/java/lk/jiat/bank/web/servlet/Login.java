@@ -59,7 +59,7 @@ public class Login extends HttpServlet {
             response.sendRedirect(request.getContextPath()+"/check-role");
 
         }else{
-            response.sendRedirect(request.getContextPath()+"/index.jsp?error=true");
+            response.sendRedirect(request.getContextPath()+"/index.jsp?error=invalid");
             //throw exception here.
         }
     }

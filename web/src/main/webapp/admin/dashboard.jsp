@@ -279,7 +279,9 @@
         </div>
     </div>
 </div>
-
+<div class="footer">
+    © 2023 National Bank. All rights reserved.
+</div>
 <script src="${pageContext.request.contextPath}/resources/js/open_close.js"></script>
 
 </body>

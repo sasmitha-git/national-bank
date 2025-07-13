@@ -141,7 +141,7 @@
 
 
 .table-container {
-    max-height: 200px;
+    max-height: 500px;
     overflow-y: auto;
 
 }
@@ -454,4 +454,13 @@
 .verification-modal .modal-header,
 .verification-modal .modal-body {
     padding: 15px 20px;
+}
+.footer {
+    margin-top: 30px;
+    font-size: 12px;
+    color: #888;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    text-align: center;
+    margin-bottom: 20px;
 }

@@ -119,6 +119,31 @@ input[type="submit"]:hover {
     text-decoration: underline;
 }
 
+
+.error-message {
+    background-color: #ffe6e6;
+    color: #d8000c;
+    border: 1px solid #d8000c;
+    padding: 12px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    animation: slideIn 0.3s ease;
+    margin-bottom: 20px;
+}
+
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
 .footer {
     margin-top: 30px;
     font-size: 12px;

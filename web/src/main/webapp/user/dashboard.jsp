@@ -237,6 +237,9 @@
         </div>
     </div>
 </div>
+<div class="footer">
+    © 2023 National Bank. All rights reserved.
+</div>
 <c:if test="${not empty param.model and param.model == 'verify'}">
     <script>
         window.addEventListener("DOMContentLoaded", function () {
@@ -244,7 +247,6 @@
         });
     </script>
 </c:if>
-
 
 <script src="${pageContext.request.contextPath}/resources/js/transactionHistory.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/open_close.js"></script>
