@@ -93,7 +93,7 @@ async function getAccounts(){
         <div class="account-card">
         <h3>${account.accountType} Account</h3>
         <p>Account Number: ${account.accountNumber}</p>
-        <p>Balance: ${account.balance}</p>
+        <p>Balance: LKR. ${account.balance}</p>
         </div>
         
         `).join('');

@@ -1,4 +1,5 @@
-<%--
+
+        <%@ page import="lk.jiat.bank.core.dto.InterestDTO" %><%--
   Created by IntelliJ IDEA.
   User: Asus
   Date: 7/5/2025
@@ -7,7 +8,16 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ page import="javax.naming.InitialContext" %>
+<%@ page import="lk.jiat.bank.core.model.Account" %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.time.LocalDateTime" %>
+<%@ page import="java.time.temporal.TemporalAdjusters" %>
+<%@ page import="lk.jiat.bank.core.service.InterestService" %>
+<%@ page import="java.math.BigDecimal" %>
+<%@ page import="java.math.RoundingMode" %>
 <html>
 <head>
 
@@ -17,6 +27,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+
+
+<%
+    try {
+        InitialContext ic = new InitialContext();
+        InterestService interestService = (InterestService) ic.lookup("lk.jiat.bank.core.service.InterestService");
+
+        List<Account> userAccounts = (List<Account>) session.getAttribute("accounts");
+        List<InterestDTO> allInterests = new java.util.ArrayList<>();
+        double totalInterest = 0;
+
+        LocalDate now = LocalDate.now();
+        LocalDateTime firstDayOfMonth = now.withDayOfMonth(1).atStartOfDay();
+        LocalDateTime lastDayOfMonth = now.with(TemporalAdjusters.lastDayOfMonth()).plusDays(1).atStartOfDay();
+
+        for (Account acc : userAccounts) {
+            List<InterestDTO> interestList = interestService.getInterestByAccountIdAndDateRange(
+                    acc.getId(), firstDayOfMonth, lastDayOfMonth
+            );
+            allInterests.addAll(interestList);
+            for (InterestDTO i : interestList) {
+                totalInterest += i.getBalance();
+            }
+        }
+
+        BigDecimal roundedTotal = BigDecimal.valueOf(totalInterest).setScale(2, RoundingMode.HALF_UP);
+        pageContext.setAttribute("interestList", allInterests);
+        pageContext.setAttribute("totalInterest", roundedTotal);
+
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+%>
+
+
+
 <input type="hidden" id="userId" value="${sessionScope.user}" />
 
 <div class="dashboard-container">
@@ -70,7 +116,7 @@
     </div>
 
     <div class="transaction-history">
-        <h2>Recent Transactions</h2>
+        <h2><i class="fa-solid fa-coins"></i> Recent Transactions</h2>
         <div class="table-container">
             <table class="transaction-table">
                 <thead>
@@ -91,7 +137,7 @@
     <div class="scheduled-transfer-container">
         <input type="checkbox" id="scheduleToggle" class="toggle-checkbox">
         <label for="scheduleToggle" class="toggle-header">
-            <h2>Schedule Future Transfer</h2>
+            <h2><i class="fa-solid fa-clock"></i>_Schedule Future Transfer</h2>
         </label>
         <div class="scheduled-transfer-wrapper">
             <div class="scheduled-transfer-form">
@@ -123,7 +169,7 @@
     </div>
 
     <div class="transaction-history">
-        <h2>Scheduled Transactions</h2>
+        <h2><i class="fa-solid fa-clock"></i> Scheduled Transactions</h2>
         <div class="table-container">
             <table class="transaction-table">
                 <thead>
@@ -140,6 +186,35 @@
             </table>
         </div>
     </div>
+
+    <%--Daily Balanced Updates--%>
+    <div class="transaction-history">
+        <h2><i class="fa-solid fa-chart-line"></i> Daily Interest Updates</h2>
+        <div class="table-container">
+            <table class="transaction-table">
+                <thead>
+                <tr>
+                    <th>Account Number</th>
+                    <th>Date</th>
+                    <th>Interest Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="interest" items="${interestList}">
+                    <tr>
+                        <td>${interest.accountNumber}</td>
+                        <td>${interest.dateFormatted}</td>
+                        <td><fmt:formatNumber value="${interest.balance}" type="currency" currencySymbol="Rs."/></td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+        <div class="interest-summary">
+            <h3>You've earned <fmt:formatNumber value="${totalInterest}" type="currency" currencySymbol="Rs."/> in interest this month.</h3>
+        </div>
+    </div>
+
 
 </div>
 
@@ -237,8 +312,11 @@
         </div>
     </div>
 </div>
+
+
+
 <div class="footer">
-    © 2023 National Bank. All rights reserved.
+    <i class="fa-solid fa-registered"></i> 2025 National Bank. All rights reserved.
 </div>
 <c:if test="${not empty param.model and param.model == 'verify'}">
     <script>

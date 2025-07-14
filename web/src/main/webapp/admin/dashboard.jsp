@@ -16,6 +16,8 @@
 <%@ page import="lk.jiat.bank.core.dto.AccountDTO" %>
 <%@ page import="lk.jiat.bank.core.dto.UserDTO" %>
 <%@ page import="lk.jiat.bank.core.dto.TransactionDTO" %>
+<%@ page import="lk.jiat.bank.core.service.BalanceService" %>
+<%@ page import="lk.jiat.bank.core.model.Balance" %>
 <html>
 <head>
     <title>National Bank</title>
@@ -41,10 +43,12 @@
             UserService userService = (UserService) ic.lookup("lk.jiat.bank.core.service.UserService");
             AccountService accountService = (AccountService) ic.lookup("lk.jiat.bank.core.service.AccountService");
             TransactionService transactionService = (TransactionService) ic.lookup("lk.jiat.bank.core.service.TransactionService");
+            BalanceService balanceService =(BalanceService) ic.lookup("lk.jiat.bank.core.service.BalanceService") ;
 
             List<UserDTO> users = userService.getAllCustomers();
             List<AccountDTO> accounts = accountService.getAllAccountsDTO();
             List<TransactionDTO> transactions = transactionService.getAllTransactionsDTO();
+            List<Balance> balances = balanceService.findAllBalances();
 
             int totalCustomers = users.size();
             long transactionsToday = transactionService.countTransactionsToday();
@@ -56,6 +60,7 @@
             pageContext.setAttribute("user", users);
             pageContext.setAttribute("accounts", accounts);
             pageContext.setAttribute("transactions", transactions);
+            pageContext.setAttribute("balances", balances);
 
         } catch (NamingException e) {
             throw new RuntimeException(e);
@@ -176,7 +181,7 @@
 
     <div class="dashboard-section">
         <div class="section-header">
-            <h2 class="section-title"> <i class="fa fa-university"></i> Customer Accounts</h2>
+            <h2 class="section-title"> <i class="fa fa-university"></i> Customer's Bank Accounts</h2>
         </div>
         <div class="section-content">
             <table class="usersTable">
@@ -237,50 +242,37 @@
         </div>
     </div>
 
-    <!-- Reports Section -->
+    <!-- Daily Balance Update -->
     <div class="dashboard-section">
         <div class="section-header">
-            <h2 class="section-title">Reports</h2>
-            <div class="report-controls">
-                <select id="reportType">
-                    <option value="monthly">Monthly Transactions</option>
-                    <option value="quarterly">Quarterly Summary</option>
-                    <option value="customers">Customer Activity</option>
-                </select>
-                <input type="month" id="reportMonth" value="2023-06">
-                <button class="generate-btn"><i class="fas fa-file-download"></i> Generate Report</button>
-            </div>
+            <h2 class="section-title"><i class="fa-solid fa-money-check-dollar"></i> Daily Balance Updates</h2>
         </div>
         <div class="section-content">
-            <div class="report-preview">
-                <h3>Monthly Transactions Report - June 2023</h3>
-                <div class="chart-container">
-                    <!-- Placeholder for chart -->
-                    <div class="chart-placeholder">
-                        <i class="fas fa-chart-bar"></i>
-                        <p>Transaction data visualization will appear here</p>
-                    </div>
-                </div>
-                <div class="report-summary">
-                    <div class="summary-item">
-                        <span class="summary-label">Total Transactions:</span>
-                        <span class="summary-value">1,245</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Total Amount:</span>
-                        <span class="summary-value">$842,750.00</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">New Accounts:</span>
-                        <span class="summary-value">87</span>
-                    </div>
-                </div>
-            </div>
+            <table class="usersTable">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Balance</th>
+                    <th>Change</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="balance" items="${balances}">
+                    <tr>
+                        <td>${balance.date}</td>
+                        <td>${balance.balance}</td>
+                        <td>${balance.changePercentage}</td>
+                    </tr>
+                </c:forEach>
+
+                </tbody>
+            </table>
         </div>
     </div>
+
 </div>
 <div class="footer">
-    © 2023 National Bank. All rights reserved.
+    <i class="fa-solid fa-registered"></i> 2025 National Bank. All rights reserved.
 </div>
 <script src="${pageContext.request.contextPath}/resources/js/open_close.js"></script>
 

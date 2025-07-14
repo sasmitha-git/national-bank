@@ -12,6 +12,7 @@
     <title>National Bank | Login</title>
     <link rel="icon" href="${pageContext.request.contextPath}/resources/images/logo.png">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 <div class="login-container">
@@ -44,7 +45,7 @@
     </form>
 
     <div class="footer">
-        © 2023 National Bank. All rights reserved.
+        <i class="fa-solid fa-registered"></i> 2025 National Bank. All rights reserved.
     </div>
 </div>
 </body>

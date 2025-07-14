@@ -2,16 +2,23 @@ package lk.jiat.bank.core.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "interests")
-@NamedQueries(
-        @NamedQuery(name = "Interest.findSumByAccountInterest",query = "select sum(i.balance) from Interest i " +
-                "where i.account=:account and i.date >=:startDate and i.date<:endDate")
+@NamedQueries({
+        @NamedQuery(
+                name = "Interest.findSumByAccountInterest",
+                query = "select sum(i.balance) from Interest i where i.account = :account and i.date >= :startDate and i.date < :endDate"
+        ),
+        @NamedQuery(
+                name = "Interest.findInterestByAccountAndDate",
+                query = "select i from Interest i where i.account.id = :accountId and i.date >= :startDate and i.date < :endDate"
+        )
+})
 
-)
-public class Interest {
+public class Interest implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -117,7 +117,7 @@ public class AccountSessionBean implements AccountService{
 
 
     @Override
-    @RolesAllowed({"ADMIN"})
+    @PermitAll
     public double getTotalDeposits() {
         return em.createNamedQuery("Account.findSumByAccountBalance",double.class)
                 .getSingleResult();
