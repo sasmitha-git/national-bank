@@ -6,11 +6,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.jiat.bank.core.exception.TransferFailedException;
 import lk.jiat.bank.core.model.Account;
 import lk.jiat.bank.core.service.AccountService;
 import lk.jiat.bank.core.service.TransactionService;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet("/transfer")
@@ -42,9 +44,13 @@ public class MoneyTransfer extends HttpServlet {
 
             resp.sendRedirect(req.getContextPath() + "/user/dashboard.jsp?success=transfer");
 
-        }catch (Exception e){
+        }catch (TransferFailedException e){
             e.printStackTrace();
-            resp.sendRedirect(req.getContextPath() + "/user/dashboard.jsp?error=transfer");
+            String error = e.getMessage();
+            resp.sendRedirect(req.getContextPath() + "/user/dashboard.jsp?error="+java.net.URLEncoder.encode(error, StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.sendRedirect(req.getContextPath() + "/user/dashboard.jsp?errorMsg=transfer failed");
         }
     }
 }

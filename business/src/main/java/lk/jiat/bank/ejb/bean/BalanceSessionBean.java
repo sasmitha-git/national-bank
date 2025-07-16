@@ -57,7 +57,6 @@ public class BalanceSessionBean implements BalanceService {
         Balance today = new Balance(LocalDate.now(),todayTotal,changePercentage);
         saveBalance(today);
         }catch (Exception e){
-            changePercentage = "Not Available";
             System.out.println(e);
         }
     }

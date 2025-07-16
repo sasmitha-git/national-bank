@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.jiat.bank.core.exception.UnauthorizedException;
 import lk.jiat.bank.core.model.User;
 import lk.jiat.bank.core.service.UserService;
 import lk.jiat.bank.core.util.Encrypt;
@@ -30,37 +31,40 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        try{
 
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
 
+            if(!userService.isActiveUser(email)){
+                response.sendRedirect(request.getContextPath() + "/index.jsp?error=inactive");
+                return;
+            }
 
+            String encryptedPassword = Encrypt.encrypt(password);
 
-        if(!userService.isActiveUser(email)){
-            response.sendRedirect(request.getContextPath() + "/index.jsp?error=inactive");
-            return;
-        }
+            AuthenticationParameters parameters = AuthenticationParameters.withParams()
+                    .credential(new UsernamePasswordCredential(email, encryptedPassword))
+                    .newAuthentication(true);
 
-        String encryptedPassword = Encrypt.encrypt(password);
+            AuthenticationStatus status = securityContext.authenticate(request, response, parameters);
 
-        AuthenticationParameters parameters = AuthenticationParameters.withParams()
-                .credential(new UsernamePasswordCredential(email, encryptedPassword))
-                .newAuthentication(true);
+            System.out.println("Authentication status: " + status);
 
-        AuthenticationStatus status = securityContext.authenticate(request, response, parameters);
+            if(status == AuthenticationStatus.SUCCESS) {
 
-        System.out.println("Authentication status: " + status);
+                User user = userService.getUserByEmail(email);
+                request.getSession().setAttribute("user", user.getId());
 
-        if(status == AuthenticationStatus.SUCCESS) {
-            //new
-            User user = userService.getUserByEmail(email);
-            request.getSession().setAttribute("user", user.getId());
+                response.sendRedirect(request.getContextPath()+"/check-role");
 
-            response.sendRedirect(request.getContextPath()+"/check-role");
+            }else{
+                response.sendRedirect(request.getContextPath()+"/index.jsp?error=invalid");
+                throw new UnauthorizedException("Unauthorized login");
+            }
 
-        }else{
-            response.sendRedirect(request.getContextPath()+"/index.jsp?error=invalid");
-            //throw exception here.
+        } catch (UnauthorizedException e) {
+            response.sendRedirect(request.getContextPath()+"/unauthorized.jsp");
         }
     }
 }

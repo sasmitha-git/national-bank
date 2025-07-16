@@ -22,7 +22,7 @@
         <div class="error-message">
             <c:choose>
                 <c:when test="${param.error == 'invalid'}">Invalid email or password. Please try again.</c:when>
-                <c:when test="${param.error == 'inactive'}">Your account is inactive. Please contact support.</c:when>
+                <c:when test="${param.error == 'inactive'}">Please Enter Your Email & Passowrd</c:when>
                 <c:when test="${param.error == 'session'}">Session expired. Please log in again.</c:when>
                 <c:when test="${param.error == 'role'}">Unauthorized access. Role mismatch.</c:when>
             </c:choose>

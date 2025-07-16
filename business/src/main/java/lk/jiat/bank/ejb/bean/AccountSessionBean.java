@@ -103,15 +103,24 @@ public class AccountSessionBean implements AccountService{
         em.merge(account);
     }
 
+
+
+
+
+
     @Override
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public void creditToAccount(String accountNo, Double amount) {
         Account account = getAccountByAccountNumber(accountNo);
-        if(account != null && amount > 0){
-            account.setBalance(account.getBalance() + amount);
-            em.merge(account);
+        if(account == null){
+            throw new TransferFailedException("Account not found");
         }
+        if(amount < 0){
+            throw new TransferFailedException("Invalid credit amount");
+        }
+        account.setBalance(account.getBalance() + amount);
+        em.merge(account);
     }
 
 

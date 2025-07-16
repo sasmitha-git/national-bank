@@ -64,7 +64,15 @@ public class UserSessionBean implements UserService {
     @RolesAllowed({"ADMIN"})
     @Override
     public void addUser(User user) {
-        em.persist(user);
+        try {
+
+            if (user == null || user.getEmail() == null || user.getPhone() ==null || user.getPassword() == null) {
+                throw new IllegalArgumentException("Invalid user data");
+            }
+            em.persist(user);
+        } catch (Exception e) {
+            throw new SecurityException("Failed to add user: " + e.getMessage(), e);
+        }
     }
 
     @RolesAllowed("ADMIN")

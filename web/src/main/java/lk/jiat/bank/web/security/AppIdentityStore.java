@@ -9,7 +9,7 @@ import jakarta.security.enterprise.identitystore.IdentityStore;
 import lk.jiat.bank.core.model.User;
 import lk.jiat.bank.core.service.UserService;
 
-import java.util.HashSet;
+
 import java.util.Set;
 
 @ApplicationScoped

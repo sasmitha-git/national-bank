@@ -12,12 +12,9 @@ import lk.jiat.bank.ejb.annotation.TimeoutLogger;
 @Priority(1)
 public class TimerInterceptor {
 
-
     @AroundTimeout
     public Object aroundTimeout(InvocationContext context) throws Exception {
         System.out.println("TimerInterceptor.aroundTimeout...........");
         return context.proceed();
     }
-
-
 }

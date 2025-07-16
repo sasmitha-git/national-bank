@@ -94,6 +94,12 @@
 
     <div class="transfer-form">
         <h2><i class="fas fa-users"></i> Transfer Funds</h2>
+        <c:if test="${not empty param.error}">
+            <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+                    ${param.error}
+            </div>
+        </c:if>
+
         <form method="POST"  action="${pageContext.request.contextPath}/transfer" >
             <div class="form-group">
                 <label>From Account:</label>

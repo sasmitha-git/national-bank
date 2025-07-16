@@ -22,7 +22,6 @@ public class MonthlyInterestSessionBean {
     private AccountService accountService;
 
 //    @Schedule(hour = "*", minute = "*/1", second = "0", persistent = false)
-
     @Schedule(dayOfMonth = "Last", hour = "23", minute = "59", second = "0", persistent = false)
     @Timeout
     public void creditMonthlyInterest() {
@@ -45,7 +44,7 @@ public class MonthlyInterestSessionBean {
 
                 Account systemAccount = accountService.getAccountByAccountNumber(system_account);
                 if (systemAccount == null) {
-                    throw new IllegalStateException("System account not found: NBBANK0000");
+                    throw new IllegalStateException("System account not found:"+ system_account);
                 }
 
                 Transaction interestTransaction = new Transaction(
