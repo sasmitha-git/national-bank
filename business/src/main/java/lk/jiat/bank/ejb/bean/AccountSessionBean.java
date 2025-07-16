@@ -13,6 +13,7 @@ import lk.jiat.bank.core.exception.TransferFailedException;
 import lk.jiat.bank.core.model.Account;
 import lk.jiat.bank.core.model.AccountType;
 import lk.jiat.bank.core.service.AccountService;
+import lk.jiat.bank.ejb.annotation.Loggable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +85,7 @@ public class AccountSessionBean implements AccountService{
         return accountDTOS;
     }
 
-
+    @Loggable
     @Override
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
@@ -107,7 +108,7 @@ public class AccountSessionBean implements AccountService{
 
 
 
-
+    @Loggable
     @Override
     @PermitAll
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
