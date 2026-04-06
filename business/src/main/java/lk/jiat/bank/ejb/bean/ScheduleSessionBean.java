@@ -4,6 +4,7 @@ import jakarta.annotation.Resource;
 import jakarta.ejb.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lk.jiat.bank.core.exception.TransferFailedException;
 import lk.jiat.bank.core.model.ScheduleStatus;
 import lk.jiat.bank.core.model.ScheduledTask;
 import lk.jiat.bank.core.service.AccountService;
@@ -50,34 +51,43 @@ public class ScheduleSessionBean implements ScheduleService {
     }
 
     @Timeout
-    public void  executeScheduledTransfer(Timer timer) {
-
+    public void executeScheduledTransfer(Timer timer) {
         Long taskId = (Long) timer.getInfo();
-        if(taskId == null){
+        if (taskId == null) {
             System.out.println("Task id is null");
             return;
         }
 
         ScheduledTask scheduledTask = em.find(ScheduledTask.class, taskId);
 
-        if(scheduledTask != null && scheduledTask.getStatus() == ScheduleStatus.ACTIVE ) {
+        if (scheduledTask != null && scheduledTask.getStatus() == ScheduleStatus.ACTIVE) {
+            try {
+                double fromBalance = scheduledTask.getFromAccount().getBalance();
+                double amount = scheduledTask.getAmount();
 
-            try{
+                if (fromBalance < amount) {
+                    throw new TransferFailedException("Insufficient funds for scheduled transfer (taskId: " + taskId + ")");
+                }
+
                 transactionService.transferFunds(
                         scheduledTask.getFromAccount().getAccountNumber(),
                         scheduledTask.getToAccount().getAccountNumber(),
-                        scheduledTask.getAmount()
+                        amount
                 );
+
                 scheduledTask.setStatus(ScheduleStatus.COMPLETED);
+
+            } catch (TransferFailedException e) {
+                scheduledTask.setStatus(ScheduleStatus.CANCELLED);
+                System.out.println("Scheduled transfer failed: " + e.getMessage());
             } catch (Exception e) {
                 scheduledTask.setStatus(ScheduleStatus.CANCELLED);
                 e.printStackTrace();
             }
+
             scheduledTask.setNextExecutionTime(LocalDateTime.now());
             em.merge(scheduledTask);
-
         }
-
     }
 
 

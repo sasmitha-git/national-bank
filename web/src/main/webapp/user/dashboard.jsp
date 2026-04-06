@@ -65,6 +65,11 @@
 
 <input type="hidden" id="userId" value="${sessionScope.user}" />
 
+<c:if test="${not empty sessionScope.errorMessage}">
+    <div class="alert alert-danger">${sessionScope.errorMessage}</div>
+    <c:remove var="errorMessage" scope="session" />
+</c:if>
+
 <div class="dashboard-container">
     <div class="header">
         <div class="logo-section">

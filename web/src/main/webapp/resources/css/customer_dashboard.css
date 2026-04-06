@@ -142,7 +142,7 @@
 
 .table-container {
     margin-top: 20px;
-    max-height: 500px;
+    max-height: 400px;
     overflow-y: auto;
 
 }
@@ -480,4 +480,18 @@
     padding-top: 20px;
     text-align: center;
     margin-bottom: 20px;
+}
+.alert {
+    text-align: center;
+    font-weight: bold;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 600px;
+}
+
+.alert-danger {
+    background-color: #ffe6e6;
+    color: #cc0000;
+    border: 1px solid #cc0000;
 }

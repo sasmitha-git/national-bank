@@ -60,7 +60,6 @@ public class Login extends HttpServlet {
 
             }else{
                 response.sendRedirect(request.getContextPath()+"/index.jsp?error=invalid");
-                throw new UnauthorizedException("Unauthorized login");
             }
 
         } catch (UnauthorizedException e) {

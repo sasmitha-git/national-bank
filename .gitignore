@@ -36,3 +36,17 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# Application secrets (don't push to GitHub)
+**/application.properties
+
+# GlassFish/Payara deployment artifacts
+*.ear
+*.war
+*.jar
+
+# Maven wrapper (optional, usually safe to keep)
+.mvn/
+
+# Log files
+*.log

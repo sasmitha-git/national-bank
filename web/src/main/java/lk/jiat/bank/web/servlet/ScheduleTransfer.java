@@ -39,19 +39,38 @@ public class ScheduleTransfer extends HttpServlet {
             DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
             LocalDateTime scheduleTime = LocalDateTime.parse(dateTime, formatDate);
 
-            if(amount <= 0){
-                throw new IllegalArgumentException("Amount must be greater than 0");
+            if(amount <= 50){
+                request.getSession().setAttribute("errorMessage", "Amount must be greater than Rs.50.0");
+                response.sendRedirect(request.getContextPath() + "/user/dashboard.jsp");
+                return;
             }
 
             if(scheduleTime.isBefore(LocalDateTime.now())){
-                throw new IllegalArgumentException("Schedule time must be before current time");
+                request.getSession().setAttribute("errorMessage", "Schedule time must be after current time");
+                response.sendRedirect(request.getContextPath() + "/user/dashboard.jsp");
+                return;
             }
+
+            if (dateTime.trim().isEmpty()) {
+                request.getSession().setAttribute("errorMessage", "Schedule time is required");
+                response.sendRedirect(request.getContextPath() + "/user/dashboard.jsp");
+                return;
+            }
+
 
             Account fromAccount = accountService.getAccountByAccountNumber(fromAccountNo);
             Account toAccount = accountService.getAccountByAccountNumber(toAccountNo);
 
             if(fromAccount == null || toAccount == null){
-                throw new IllegalArgumentException("Account not found");
+                request.getSession().setAttribute("errorMessage", "Account not found");
+                response.sendRedirect(request.getContextPath() + "/user/dashboard.jsp");
+                return;
+            }
+
+            if (fromAccount.getBalance() < amount) {
+                request.getSession().setAttribute("errorMessage", "Insufficient balance in the source account.");
+                response.sendRedirect(request.getContextPath() + "/user/dashboard.jsp");
+                return;
             }
 
             Long userId = (Long) request.getSession().getAttribute("user");
@@ -75,6 +94,8 @@ public class ScheduleTransfer extends HttpServlet {
 
         }catch (Exception e){
             e.printStackTrace();
+            request.getSession().setAttribute("errorMessage", "Something went wrong while scheduling. Please try again.");
+            response.sendRedirect(request.getContextPath() + "/user/dashboard.jsp");
         }
 
     }

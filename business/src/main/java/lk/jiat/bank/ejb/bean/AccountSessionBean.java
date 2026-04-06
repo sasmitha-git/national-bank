@@ -105,9 +105,6 @@ public class AccountSessionBean implements AccountService{
     }
 
 
-
-
-
     @Loggable
     @Override
     @PermitAll
