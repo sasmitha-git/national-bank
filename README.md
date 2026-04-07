@@ -115,7 +115,7 @@ national-bank/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/national-bank.git
+git clone https://github.com/sasmitha-git/national-bank.git
 cd national-bank
 ```
 
